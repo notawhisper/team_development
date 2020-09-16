@@ -61,7 +61,7 @@ class TeamsController < ApplicationController
 
   def is_team_owner?
     unless current_user == @team.owner
-      redirect_to @team, notice: '権限がありません'
+      redirect_to @team, notice: I18n.t('views.messages.have_no_authority')
     end
   end
 end

@@ -70,7 +70,7 @@ class AssignsController < ApplicationController
   def is_current_user_team_owner_or_target_user?
     team = find_team(params[:team_id])
     unless params[:id] == current_user.id || team.owner == current_user
-      redirect_to team_url(team), notice: '削除する権限がありません'
+      redirect_to team_url(team), notice: I18n.t('views.messages.have_no_authority')
     end
   end
 end
