@@ -2,6 +2,7 @@ class AssignsController < ApplicationController
   before_action :authenticate_user!
   before_action :email_exist?, only: [:create]
   before_action :user_exist?, only: [:create]
+  before_action :is_current_user_team_owner_or_target_user?, only: [:destroy]
 
   def create
     team = find_team(params[:team_id])
@@ -63,6 +64,13 @@ class AssignsController < ApplicationController
   end
 
   def find_team(team_id)
-    team = Team.friendly.find(params[:team_id])
+    Team.friendly.find(team_id)
+  end
+
+  def is_current_user_team_owner_or_target_user?
+    team = find_team(params[:team_id])
+    unless params[:id] == current_user.id || team.owner == current_user
+      redirect_to team_url(team), notice: I18n.t('views.messages.have_no_authority')
+    end
   end
 end
